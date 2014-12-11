@@ -1,5 +1,3 @@
-// EXPERIMENT WITH TIMED MOVEMENTS
-
 // this server runs on the Yun
 // it accepts commands via the url string, and sets the speeds
 // of the two motors based on the commands
@@ -69,62 +67,8 @@ void loop() {
   delay(50); // Poll every 50ms
 }
 
-void process(YunClient client) {
-  
-  // read the command embedded in the url up to the '?' character (which starts the json callback query)
-  String command = client.readStringUntil('?');
-  
-  Serial.println();
-  Serial.print(F("New command: "));
-  Serial.println(command);
-  
-  // decode the command
-  int left_dir = command.substring(0,1).toInt();
-  int left_speed = command.substring(1,4).toInt();
-  int right_dir = command.substring(4,5).toInt();
-  int right_speed = command.substring(5,8).toInt();
-  int time = command.substring(8,command.length()).toInt();
-  
-  Serial.print(F("Time: "));
-  Serial.println(time);
-  
-  for (int i = 0; i < command.length(); i++) {
-    Serial.println((int)command[i]);
-  }
-  
-  if (left_speed == 0) 
-    left_brake();
-  else {
-    if (left_dir == 0) 
-      left_reverse(left_speed);
-    else 
-      left_forward(left_speed);
-  }
-    
-   // set the speed of the right motor
-  if (right_speed == 0) 
-    right_brake();
-  else {
-    if (right_dir == 0)
-      right_reverse(right_speed);
-    else 
-      right_forward(right_speed);
-  }
-  
-  if (time != 0) {
-    delay(time);
-    left_brake();
-    right_brake();
-  }
-    
-  // send back the command for debugging purposes
-  command.trim();
-  String response = "jsonCallback({'message': '" + command + "'})"; 
-  client.print(response);
-}
-
 // process a single command
-/*void process(YunClient client) {
+void process(YunClient client) {
   
   // read the command embedded in the url
   String command = client.readString();
@@ -161,7 +105,7 @@ void process(YunClient client) {
   // send back the command for debugging purposes
   String response = "jsonCallback({'message': '" + command.substring(0,8) + "'})"; 
   client.print(response);
-}*/
+}
 
 //////////////// MOTOR FUNCTIONS /////////////////
 void left_forward(int rate)
