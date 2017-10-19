@@ -1,2 +1,1 @@
-# yunSVR
-_server + movement controls_
+# Basic Arduino Yun Server + Movement Controls
